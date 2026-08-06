@@ -72,7 +72,6 @@ form?.addEventListener('submit', async (event) => {
 
   const payload = Object.fromEntries(new FormData(form).entries());
   
-  // Anti-spam (Honeypot)
   if (payload.company) {
     setStatus('Candidature transmise !', 'success');
     return;
@@ -81,7 +80,6 @@ form?.addEventListener('submit', async (event) => {
   setLoading(true);
   setStatus('Le dossier traverse le désert jusqu’au bureau du patron...');
 
-  // Construction du message Discord
   const discordPayload = {
     embeds: [{
       title: "📝 Nouvelle candidature — Yellow Jack",
@@ -89,6 +87,7 @@ form?.addEventListener('submit', async (event) => {
       fields: [
         { name: "Personnage", value: `${payload.firstName} ${payload.lastName} (${payload.age} ans)`, inline: false },
         { name: "Poste visé", value: payload.position, inline: true },
+        { name: "Disponibilités", value: payload.availability || "Non renseigné", inline: false },
         { name: "Expérience RP", value: payload.experience, inline: false },
         { name: "Qualités & Défauts", value: payload.traits, inline: false },
         { name: "Motivations", value: payload.motivation, inline: false }
@@ -98,7 +97,6 @@ form?.addEventListener('submit', async (event) => {
   };
 
   try {
-    // ⚠️ Remplace l'URL ci-dessous par l'URL de ton Webhook Discord (gardes bien les guillemets)
     const webhookUrl = "https://discord.com/api/webhooks/1534733289305411735/rIeFIN8w4s4OmnKjcvMW-5i_kVsjYJeQ-dPeUgKT9MzGReVB_WIyTWuBA_RdJSu0yVu5";
 
     const response = await fetch(webhookUrl, {
