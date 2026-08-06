@@ -8,6 +8,36 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="style.css" />
+    <style>
+      /* Correctif direct pour l'affichage du formulaire */
+      #application-form {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        text-align: left;
+      }
+      #application-form .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      #application-form label {
+        display: block !important;
+        position: static !important;
+        width: 100% !important;
+        margin-bottom: 0.3rem;
+        color: #f4ebd0;
+        font-weight: 600;
+      }
+      #application-form input,
+      #application-form select,
+      #application-form textarea {
+        display: block !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        margin: 0 !important;
+      }
+    </style>
   </head>
   <body>
     <header class="site-header">
@@ -50,7 +80,7 @@
         <div class="container grid-2">
           <div class="reveal">
             <h2>Un lieu de vie hors du temps</h2>
-            <p>Niché sous le soleil brûlant de Blaine County, le Yellow Jack Inn est le point de ralliement des routiers, des motards, des artistes de passage et de tous ceux qui cherchent un endroit où souffler.</p>
+            <p>Niché sous le soleil brûlant de Blaine County, le Yellow Jack Inn es le point de ralliement des routiers, des motards, des artistes de passage et de tous ceux qui cherchent un endroit où souffler.</p>
             <p>Ambiance chaleureuse, jukebox vintage, billard et boissons bien fraîches : tout est réuni pour passer une excellente soirée loin du tumulte de Los Santos.</p>
           </div>
           <div class="card reveal">
@@ -89,11 +119,11 @@
         </div>
       </section>
 
-      <!-- RECRUTEMENT (Design d'origine conservé) -->
+      <!-- RECRUTEMENT -->
       <section id="recrutement" class="section">
         <div class="container narrow">
           <form id="application-form" class="form reveal">
-            <div class="form-title-block">
+            <div class="form-title-block" style="text-align: center; margin-bottom: 2rem;">
               <span class="eyebrow">Dossier</span>
               <h2>Candidature Yellow Jack</h2>
               <p class="form-subtitle">Informations personnage — RP uniquement</p>
@@ -103,34 +133,31 @@
               <label>Ne remplissez pas ceci si vous êtes humain : <input type="text" name="company" tabindex="-1" autocomplete="off" /></label>
             </div>
 
-            <div class="form-row">
-              <div class="form-group">
-                <label for="firstName">Nom du personnage *</label>
-                <input type="text" id="firstName" name="firstName" required />
-              </div>
-              <div class="form-group">
-                <label for="lastName">Prénom du personnage *</label>
-                <input type="text" id="lastName" name="lastName" required />
-              </div>
+            <div class="form-group">
+              <label for="firstName">Nom du personnage *</label>
+              <input type="text" id="firstName" name="firstName" required />
             </div>
 
-            <div class="form-row">
-              <div class="form-group">
-                <label for="age">Âge du personnage *</label>
-                <input type="number" id="age" name="age" min="18" max="99" required />
-              </div>
-              <div class="form-group">
-                <label for="position">Poste visé *</label>
-                <select id="position" name="position" required>
-                  <option value="" disabled selected>Sélectionnez un élément dans la liste.</option>
-                  <option value="Barman">Barman</option>
-                  <option value="Sécurité">Sécurité</option>
-                  <option value="Serveur">Serveur</option>
-                </select>
-              </div>
+            <div class="form-group">
+              <label for="lastName">Prénom du personnage *</label>
+              <input type="text" id="lastName" name="lastName" required />
             </div>
 
-            <!-- Ajout du champ disponibilités pour que Supabase reçoive tout -->
+            <div class="form-group">
+              <label for="age">Âge du personnage *</label>
+              <input type="number" id="age" name="age" min="18" max="99" required />
+            </div>
+
+            <div class="form-group">
+              <label for="position">Poste visé *</label>
+              <select id="position" name="position" required>
+                <option value="" disabled selected>Sélectionnez un élément dans la liste.</option>
+                <option value="Barman">Barman</option>
+                <option value="Sécurité">Sécurité</option>
+                <option value="Serveur">Serveur</option>
+              </select>
+            </div>
+
             <div class="form-group">
               <label for="availability">Disponibilités (Horaires / Jours) *</label>
               <input type="text" id="availability" name="availability" required placeholder="ex: Le soir en semaine" />
@@ -153,7 +180,7 @@
 
             <div id="form-status" class="form-status" aria-live="polite"></div>
 
-            <button type="submit" class="button button-primary button-full">
+            <button type="submit" class="button button-primary button-full" style="margin-top: 1rem;">
               <span>Envoyer ma candidature</span>
             </button>
           </form>
