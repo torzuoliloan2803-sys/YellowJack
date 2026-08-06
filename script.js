@@ -1,6 +1,5 @@
 const SUPABASE_URL = "https://ribrhupnsocybyzznwsu.supabase.co";
 const SUPABASE_KEY = "sb_publishable_NDLHFnFXdlHkSSNuPxWYKw_MxmXmZYh"; 
-const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1534733289305411735/rIeFIN8w4s4OmnKjcvMW-5i_kVsjYJeQ-dPeUgKT9MzGReVB_WIyTWuBA_RdJSu0yVu5";
 
 document.addEventListener('DOMContentLoaded', () => {
   const yearEl = document.querySelector('#year');
@@ -26,7 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (formStatus) formStatus.textContent = 'Envoi de votre dossier en cours...';
 
     try {
-      // 1. Enregistrement dans Supabase
       const response = await fetch(`${SUPABASE_URL}/rest/v1/applications`, {
         method: 'POST',
         headers: {
@@ -49,16 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })
       });
 
-      if (!response.ok) throw new Error('Erreur lors de l’enregistrement Supabase');
-
-      // 2. Envoi direct de la notification sur le salon Recrutement Discord
-      await fetch(DISCORD_WEBHOOK_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          content: `📢 **Nouvelle candidature reçue !**\n👤 **Nom :** ${payload.firstName} ${payload.lastName} (${payload.age} ans)\n💼 **Poste :** ${payload.position}\n💬 **Discord :** <@${payload.discord}>`
-        })
-      });
+      if (!response.ok) throw new Error('Erreur lors de l’enregistrement');
 
       form.reset();
       if (formStatus) {
