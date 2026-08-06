@@ -89,64 +89,65 @@
         </div>
       </section>
 
-      <!-- RECRUTEMENT -->
+      <!-- RECRUTEMENT (Design d'origine conservé) -->
       <section id="recrutement" class="section">
         <div class="container narrow">
-          <div class="section-header reveal">
-            <span class="eyebrow">Intégrez l'équipe</span>
-            <h2>Candidature au Yellow Jack</h2>
-            <p>Envie de travailler derrière le comptoir le plus célèbre du désert ? Remplis ton dossier ci-dessous.</p>
-          </div>
-
           <form id="application-form" class="form reveal">
+            <div class="form-title-block">
+              <span class="eyebrow">Dossier</span>
+              <h2>Candidature Yellow Jack</h2>
+              <p class="form-subtitle">Informations personnage — RP uniquement</p>
+            </div>
+
             <div style="display:none;" aria-hidden="true">
               <label>Ne remplissez pas ceci si vous êtes humain : <input type="text" name="company" tabindex="-1" autocomplete="off" /></label>
             </div>
 
             <div class="form-row">
               <div class="form-group">
-                <label for="firstName">Prénom (RP) *</label>
-                <input type="text" id="firstName" name="firstName" required placeholder="ex: John" />
+                <label for="firstName">Nom du personnage *</label>
+                <input type="text" id="firstName" name="firstName" required />
               </div>
               <div class="form-group">
-                <label for="lastName">Nom (RP) *</label>
-                <input type="text" id="lastName" name="lastName" required placeholder="ex: Marston" />
+                <label for="lastName">Prénom du personnage *</label>
+                <input type="text" id="lastName" name="lastName" required />
               </div>
             </div>
 
             <div class="form-row">
               <div class="form-group">
-                <label for="age">Âge (RP) *</label>
-                <input type="number" id="age" name="age" min="18" max="99" required placeholder="ex: 28" />
+                <label for="age">Âge du personnage *</label>
+                <input type="number" id="age" name="age" min="18" max="99" required />
               </div>
               <div class="form-group">
-                <label for="position">Poste souhaité *</label>
+                <label for="position">Poste visé *</label>
                 <select id="position" name="position" required>
-                  <option value="" disabled selected>Choisis un poste</option>
-                  <option value="Barman / Barmaid">Barman / Barmaid</option>
-                  <option value="Sécurité / Bouncer">Sécurité / Bouncer</option>
-                  <option value="Serveur / Serveuse">Serveur / Serveuse</option>
+                  <option value="" disabled selected>Sélectionnez un élément dans la liste.</option>
+                  <option value="Barman">Barman</option>
+                  <option value="Sécurité">Sécurité</option>
+                  <option value="Serveur">Serveur</option>
                 </select>
               </div>
             </div>
 
+            <!-- Ajout du champ disponibilités pour que Supabase reçoive tout -->
             <div class="form-group">
               <label for="availability">Disponibilités (Horaires / Jours) *</label>
-              <input type="text" id="availability" name="availability" required placeholder="ex: Les soirs à partir de 21h" />
+              <input type="text" id="availability" name="availability" required placeholder="ex: Le soir en semaine" />
             </div>
 
             <div class="form-group">
-              <label for="experience">Expérience professionnelle ou RP *</label>
-              <textarea id="experience" name="experience" rows="3" required placeholder="As-tu déjà travaillé dans le milieu de la nuit ou de la restauration ?"></textarea>
+              <label for="experience">Expérience RP & Passif *</label>
+              <textarea id="experience" name="experience" rows="4" required placeholder="As-tu déjà travaillé dans le milieu de la nuit..."></textarea>
             </div>
 
             <div class="form-group">
-              <label for="traits">Qualités et Défauts *</label>
-              <textarea id="traits" name="traits" rows="2" required placeholder="Qu'est-ce qui fait de toi un bon atout pour le Yellow Jack ?"></textarea>
+              <label for="traits">Qualités & Défauts *</label>
+              <textarea id="traits" name="traits" rows="3" required placeholder="Qu'est-ce qui fait de toi un bon atout..."></textarea>
             </div>
 
             <div class="form-group">
-              <label for="motivation">Pourquoi le Yellow Jack ? (Lettre de motivation) *</label>
+              <label for="motivation">Motivations *</label>
               <textarea id="motivation" name="motivation" rows="4" required placeholder="Raconte-nous pourquoi tu veux rejoindre notre équipe..."></textarea>
             </div>
 
@@ -163,7 +164,6 @@
     <footer class="site-footer">
       <div class="container footer-content">
         <p>&copy; <span id="year"></span> Yellow Jack Inn. Tous droits réservés.</p>
-        <!-- Bouton d'accès staff discret -->
         <div class="admin-access" style="margin-top: 0.8rem; opacity: 0.5;">
           <a href="#" id="secret-admin-btn" style="color: #d4af37; font-size: 0.85rem; text-decoration: none;">🔒 Accès Staff</a>
         </div>
