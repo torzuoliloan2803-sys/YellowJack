@@ -1,137 +1,80 @@
-// ==========================================
-// CONFIGURATION SUPABASE (Ne supprime pas)
-// ==========================================
+// CONFIGURATION SUPABASE
 const SUPABASE_URL = "https://ribrhupnsocybyzznwsu.supabase.co";
-const SUPABASE_KEY = "sb_publishable_NDLHFnFxDlHkSSNuPxWYKw_MxmXmz..."; // Ta clé Publishable
+const SUPABASE_KEY = "sb_publishable_NDLHFnFxDlHkSSNuPxWYKw_MxmXmz..."; 
 
-const header = document.querySelector('.site-header');
-const navToggle = document.querySelector('.nav-toggle');
-const navLinks = document.querySelectorAll('.main-nav a');
-const form = document.querySelector('#application-form');
-const formStatus = document.querySelector('#form-status');
-const submitButton = form?.querySelector('button[type="submit"]');
+document.addEventListener('DOMContentLoaded', () => {
+  const yearEl = document.querySelector('#year');
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-document.querySelector('#year').textContent = new Date().getFullYear();
+  const form = document.querySelector('#application-form');
+  const formStatus = document.querySelector('#form-status');
+  const submitButton = form?.querySelector('.submit-button');
 
-const closeNavigation = () => {
-  document.body.classList.remove('nav-open');
-  navToggle?.setAttribute('aria-expanded', 'false');
-  navToggle?.setAttribute('aria-label', 'Ouvrir le menu');
-};
+  form?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (formStatus) formStatus.textContent = '';
 
-navToggle?.addEventListener('click', () => {
-  const isOpen = document.body.classList.toggle('nav-open');
-  navToggle.setAttribute('aria-expanded', String(isOpen));
-  navToggle.setAttribute('aria-label', isOpen ? 'Fermer le menu' : 'Ouvrir le menu');
-});
+    const formData = new FormData(form);
+    const payload = Object.fromEntries(formData.entries());
 
-navLinks.forEach((link) => link.addEventListener('click', closeNavigation));
-document.addEventListener('keydown', (event) => {
-  if (event.key === 'Escape') closeNavigation();
-});
+    if (payload.company) {
+      if (formStatus) formStatus.textContent = 'Candidature transmise !';
+      return;
+    }
 
-const updateHeader = () => header?.classList.toggle('scrolled', window.scrollY > 30);
-updateHeader();
-window.addEventListener('scroll', updateHeader, { passive: true });
+    if (submitButton) submitButton.disabled = true;
+    if (formStatus) formStatus.textContent = 'Envoi de votre dossier en cours...';
 
-const revealObserver = new IntersectionObserver(
-  (entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        revealObserver.unobserve(entry.target);
+    try {
+      const response = await fetch(`${SUPABASE_URL}/rest/v1/applications`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({
+          first_name: payload.firstName,
+          last_name: payload.lastName,
+          age: parseInt(payload.age) || 18,
+          position: payload.position,
+          availability: "Non spécifié",
+          experience: payload.experience,
+          traits: payload.traits,
+          motivation: payload.motivation
+        })
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Erreur Supabase:", errorText);
+        throw new Error('Erreur lors de l’enregistrement');
       }
-    });
-  },
-  { threshold: 0.12 },
-);
 
-document.querySelectorAll('.reveal').forEach((element, index) => {
-  element.style.transitionDelay = `${Math.min(index % 4, 3) * 70}ms`;
-  revealObserver.observe(element);
-});
+      form.reset();
+      if (formStatus) {
+        formStatus.style.color = "#4ade80"; // Vert succès
+        formStatus.textContent = 'Candidature transmise avec succès ! L’équipe va l’examiner.';
+      }
+    } catch (err) {
+      console.error(err);
+      if (formStatus) {
+        formStatus.style.color = "#f87171"; // Rouge erreur
+        formStatus.textContent = 'Une erreur est survenue lors de l’envoi. Réessayez.';
+      }
+    } finally {
+      if (submitButton) submitButton.disabled = false;
+    }
+  });
 
-const setStatus = (message, type = '') => {
-  formStatus.textContent = message;
-  formStatus.className = `form-status ${type}`.trim();
-};
-
-const setLoading = (loading) => {
-  submitButton.disabled = loading;
-  submitButton.querySelector('span').textContent = loading ? 'Transmission en cours...' : 'Envoyer ma candidature';
-};
-
-// Gestion de l'envoi du formulaire vers Supabase
-form?.addEventListener('submit', async (event) => {
-  event.preventDefault();
-  setStatus('');
-
-  const fields = [...form.querySelectorAll('input, select, textarea')];
-  fields.forEach((field) => field.removeAttribute('aria-invalid'));
-
-  if (!form.checkValidity()) {
-    const invalidFields = fields.filter((field) => !field.checkValidity());
-    invalidFields.forEach((field) => field.setAttribute('aria-invalid', 'true'));
-    invalidFields[0]?.focus();
-    setStatus('Vérifie les champs obligatoires avant d’envoyer ton dossier.', 'error');
-    return;
-  }
-
-  const formData = new FormData(form);
-  const payload = Object.fromEntries(formData.entries());
-  
-  if (payload.company) {
-    setStatus('Candidature transmise !', 'success');
-    return;
-  }
-
-  setLoading(true);
-  setStatus('Le dossier traverse le désert jusqu’au bureau du patron...');
-
-  try {
-    const response = await fetch(`${SUPABASE_URL}/rest/v1/applications`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'apikey': SUPABASE_KEY,
-        'Authorization': `Bearer ${SUPABASE_KEY}`,
-        'Prefer': 'return=minimal'
-      },
-      body: JSON.stringify({
-        first_name: payload.firstName,
-        last_name: payload.lastName,
-        age: parseInt(payload.age),
-        position: payload.position,
-        availability: payload.availability,
-        experience: payload.experience,
-        traits: payload.traits,
-        motivation: payload.motivation
-      })
-    });
-
-    if (!response.ok) throw new Error('Erreur lors de l’enregistrement de la candidature.');
-
-    form.reset();
-    setStatus('Candidature transmise avec succès ! L’équipe du Yellow Jack va l’examiner.', 'success');
-  } catch (error) {
-    console.error(error);
-    setStatus('Une erreur est survenue lors de l’envoi. Réessaie dans quelques instants.', 'error');
-  } finally {
-    setLoading(false);
-  }
-});
-
-// ==========================================
-// PROTECTION DU BOUTON ACCÈS STAFF
-// ==========================================
-document.getElementById('secret-admin-btn')?.addEventListener('click', (e) => {
-  e.preventDefault();
-  const password = prompt("Entrez le mot de passe administrateur :", "");
-  
-  // Mot de passe staff (tu peux le modifier ici si tu veux)
-  if (password === "yellowjackpassword") {
-    window.location.href = "admin.html";
-  } else if (password !== null) {
-    alert("Mot de passe incorrect !");
-  }
+  document.getElementById('secret-admin-btn')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    const password = prompt("Entrez le mot de passe administrateur :", "");
+    if (password === "yellowjackpassword") {
+      window.location.href = "admin.html";
+    } else if (password !== null) {
+      alert("Mot de passe incorrect !");
+    }
+  });
 });
