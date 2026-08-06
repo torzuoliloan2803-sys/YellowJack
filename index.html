@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recrutement - Yellow Jack</title>
+    <title>Yellow Jack - Recrutement</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -39,7 +39,7 @@
             </div>
 
             <div class="form-group">
-                <label for="discord">Nom Discord (ex: pseudo#0000 ou identifiant) :</label>
+                <label for="discord">Nom Discord :</label>
                 <input type="text" id="discord" name="discord" required>
             </div>
 
@@ -67,27 +67,27 @@
         <!-- Zone d'affichage du statut d'envoi et du numéro de dossier -->
         <div id="form-status" style="margin-top: 20px; font-weight: bold; text-align: center;"></div>
 
-        <hr style="margin: 40px 0; border: 0; border-top: 1px solid #444;">
+        <hr style="margin: 40px 0; border: 0; border-top: 1px solid #d4af37;">
 
-        <!-- Zone de suivi en temps réel de la candidature -->
-        <div class="tracking-container" style="text-align: center;">
-            <h3>🔍 Suivre ma candidature</h3>
-            <p style="font-size: 0.9rem; color: #aaa;">Entre le numéro de dossier qui t'a été attribué lors de l'envoi :</p>
-            <div style="margin-top: 10px;">
-                <input type="number" id="track-id" placeholder="Numéro de dossier" style="padding: 8px; border-radius: 5px; border: 1px solid #555; background: #222; color: #fff;">
-                <button id="track-btn" style="padding: 8px 15px; background: #f59e0b; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; color: #000;">Vérifier</button>
+        <!-- Zone de suivi en temps réel de la candidature (Intégrée au design) -->
+        <div class="tracking-container" style="text-align: center; background: rgba(0,0,0,0.3); padding: 25px; border-radius: 8px; border: 1px solid #d4af37;">
+            <h3 style="color: #d4af37; margin-bottom: 10px;">🔍 Suivre ma candidature</h3>
+            <p style="font-size: 0.9rem; color: #ccc; margin-bottom: 15px;">Entre ton numéro de dossier pour consulter ton statut en direct :</p>
+            <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+                <input type="number" id="track-id" placeholder="Ex: 7" style="padding: 10px; border-radius: 5px; border: 1px solid #d4af37; background: #111; color: #fff; width: 180px;">
+                <button id="track-btn" style="padding: 10px 20px; background: #d4af37; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; color: #000;">Vérifier</button>
             </div>
-            <div id="track-result" style="margin-top: 15px; font-weight: bold;"></div>
+            <div id="track-result" style="margin-top: 20px; font-weight: bold; font-size: 1.1rem;"></div>
         </div>
 
         <!-- Bouton secret pour accéder à la page admin -->
-        <div style="margin-top: 50px; text-align: center;">
-            <a href="#" id="secret-admin-btn" style="color: #666; font-size: 0.8rem; text-decoration: none;">Administration</a>
+        <div style="margin-top: 40px; text-align: center;">
+            <a href="#" id="secret-admin-btn" style="color: #555; font-size: 0.8rem; text-decoration: none;">Administration</a>
         </div>
     </main>
 
     <footer style="text-align: center; margin-top: 30px; padding: 20px; color: #666;">
-        &copy; <span id="year"></span> - Tous droits réservés.
+        &copy; <span id="year"></span> - Yellow Jack. Tous droits réservés.
     </footer>
 
     <script src="script.js"></script>
