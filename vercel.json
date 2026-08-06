@@ -1,7 +1,0 @@
-{
-  "functions": {
-    "netlify/functions/recruitment.mts": {
-      "maxDuration": 10
-    }
-  }
-}
