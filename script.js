@@ -71,23 +71,48 @@ form?.addEventListener('submit', async (event) => {
   }
 
   const payload = Object.fromEntries(new FormData(form).entries());
+  
+  // Anti-spam (Honeypot)
+  if (payload.company) {
+    setStatus('Candidature transmise !', 'success');
+    return;
+  }
+
   setLoading(true);
   setStatus('Le dossier traverse le désert jusqu’au bureau du patron...');
 
+  // Construction du message Discord
+  const discordPayload = {
+    embeds: [{
+      title: "📝 Nouvelle candidature — Yellow Jack",
+      color: 16763904,
+      fields: [
+        { name: "Personnage", value: `${payload.firstName} ${payload.lastName} (${payload.age} ans)`, inline: false },
+        { name: "Poste visé", value: payload.position, inline: true },
+        { name: "Expérience RP", value: payload.experience, inline: false },
+        { name: "Qualités & Défauts", value: payload.traits, inline: false },
+        { name: "Motivations", value: payload.motivation, inline: false }
+      ],
+      timestamp: new Date().toISOString()
+    }]
+  };
+
   try {
-    const response = await fetch('/api/recruitment', {
+    // ⚠️ Remplace l'URL ci-dessous par l'URL de ton Webhook Discord (gardes bien les guillemets)
+    const webhookUrl = "https://discord.com/api/webhooks/ TON_URL_DE_WEBHOOK_ICI";
+
+    const response = await fetch(webhookUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
+      body: JSON.stringify(discordPayload),
     });
-    const result = await response.json().catch(() => ({}));
 
-    if (!response.ok) throw new Error(result.error || 'Le service de recrutement est momentanément indisponible.');
+    if (!response.ok) throw new Error('Erreur lors de l’envoi sur le salon Discord.');
 
     form.reset();
     setStatus('Candidature transmise ! L’équipe du Yellow Jack reviendra vers toi sur Discord.', 'success');
   } catch (error) {
-    setStatus(error.message || 'Une erreur est survenue. Réessaie dans quelques instants.', 'error');
+    setStatus('Une erreur est survenue lors de l’envoi. Réessaie dans quelques instants.', 'error');
   } finally {
     setLoading(false);
   }
