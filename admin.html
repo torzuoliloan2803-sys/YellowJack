@@ -32,7 +32,7 @@
 
   <script>
     const SUPABASE_URL = "https://ribrhupnsocybyzznwsu.supabase.co";
-    const SUPABASE_KEY = "sb_publishable_NDLHFnFXdlHkSSNuPxWYKw_MxmXmZYh"; // Remets ta vraie clé complète
+    const SUPABASE_KEY = "sb_publishable_NDLHFnFxDlHkSSNuPxWYKw_MxmXmz..."; // Ta clé complète
 
     async function loadApplications() {
       const container = document.getElementById('applications-list');
@@ -55,12 +55,13 @@
             </div>
             <div class="app-body">
               <p><b>Poste visé :</b> ${app.position || 'Non spécifié'} — Reçu le : ${new Date(app.created_at).toLocaleDateString()}</p>
-              <p><b>Discord :</b> ${app.discord || 'Non renseigné'}</p>
+              <p><b>ID Discord :</b> <span style="color:#60a5fa;">@${app.discord || 'Non renseigné'}</span></p>
               <p><b>Disponibilités :</b> ${app.availability || 'Non spécifié'}</p>
               <p><b>Expérience RP :</b><br>${app.experience || ''}</p>
               <p><b>Qualités & Défauts :</b><br>${app.traits || ''}</p>
               <p><b>Motivations :</b><br>${app.motivation || ''}</p>
               ${app.admin_comment ? `<div class="comment-box"><b>Motif / Note staff :</b> ${app.admin_comment}</div>` : ''}
+              
               <div class="admin-actions">
                 <button class="btn-accept" onclick="updateStatus(${app.id}, 'accepte')">Accepter</button>
                 <button class="btn-refuse" onclick="updateStatus(${app.id}, 'refuse')">Refuser</button>
@@ -77,7 +78,7 @@
       const actionName = newStatus === 'accepte' ? 'accepter' : 'refuser';
       const reason = prompt(`Entrez la raison ou un commentaire pour ${actionName} cette candidature :`, "");
       
-      if (reason === null) return; // Si l'admin clique sur Annuler
+      if (reason === null) return; // Annulation si l'admin clique sur Annuler
 
       try {
         const res = await fetch(`${SUPABASE_URL}/rest/v1/applications?id=eq.${id}`, {
@@ -96,6 +97,7 @@
 
         if (!res.ok) throw new Error("Erreur mise à jour");
         loadApplications();
+        alert("Statut mis à jour et notification envoyée sur Discord !");
       } catch (err) {
         alert("Erreur lors de la mise à jour du statut.");
       }
