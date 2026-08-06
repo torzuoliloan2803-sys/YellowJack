@@ -1,6 +1,5 @@
-// CONFIGURATION SUPABASE
 const SUPABASE_URL = "https://ribrhupnsocybyzznwsu.supabase.co";
-const SUPABASE_KEY = "sb_publishable_NDLHFnFXdlHkSSNuPxWYKw_MxmXmZYh"; 
+const SUPABASE_KEY = "sb_publishable_NDLHFnFXdlHkSSNuPxWYKw_MxmXmZYh";
 
 document.addEventListener('DOMContentLoaded', () => {
   const yearEl = document.querySelector('#year');
@@ -39,7 +38,6 @@ document.addEventListener('DOMContentLoaded', () => {
           last_name: payload.lastName,
           age: parseInt(payload.age) || 18,
           position: payload.position,
-          availability: "Non spécifié",
           experience: payload.experience,
           traits: payload.traits,
           motivation: payload.motivation
@@ -48,20 +46,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (!response.ok) {
         const errorText = await response.text();
-if (!response.ok) {
-        const errorText = await response.text();
-        console.error("DÉTAIL ERREUR SUPABASE :", errorText); // <-- Affiche l'erreur exacte
+        console.error("DÉTAIL ERREUR SUPABASE :", errorText);
         throw new Error('Erreur lors de l’enregistrement');
       }
+
       form.reset();
       if (formStatus) {
-        formStatus.style.color = "#4ade80"; // Vert succès
+        formStatus.style.color = "#4ade80";
         formStatus.textContent = 'Candidature transmise avec succès ! L’équipe va l’examiner.';
       }
     } catch (err) {
       console.error(err);
       if (formStatus) {
-        formStatus.style.color = "#f87171"; // Rouge erreur
+        formStatus.style.color = "#f87171";
         formStatus.textContent = 'Une erreur est survenue lors de l’envoi. Réessayez.';
       }
     } finally {
