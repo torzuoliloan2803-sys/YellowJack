@@ -1,3 +1,7 @@
+// CONFIGURATION SUPABASE
+const SUPABASE_URL = "https://ribrhupnsocybyzznwsu.supabase.co";
+const SUPABASE_KEY = "sb_publishable_NDLHFnFXdlHkSSNuPxWYKw_MxmXmZYh"; // Colle ta clé sb_publishable_... ici
+
 const header = document.querySelector('.site-header');
 const navToggle = document.querySelector('.nav-toggle');
 const navLinks = document.querySelectorAll('.main-nav a');
@@ -70,7 +74,8 @@ form?.addEventListener('submit', async (event) => {
     return;
   }
 
-  const payload = Object.fromEntries(new FormData(form).entries());
+  const formData = new FormData(form);
+  const payload = Object.fromEntries(formData.entries());
   
   if (payload.company) {
     setStatus('Candidature transmise !', 'success');
@@ -80,36 +85,46 @@ form?.addEventListener('submit', async (event) => {
   setLoading(true);
   setStatus('Le dossier traverse le désert jusqu’au bureau du patron...');
 
-  const discordPayload = {
-    embeds: [{
-      title: "📝 Nouvelle candidature — Yellow Jack",
-      color: 16763904,
-      fields: [
-        { name: "Personnage", value: `${payload.firstName} ${payload.lastName} (${payload.age} ans)`, inline: false },
-        { name: "Poste visé", value: payload.position, inline: true },
-        { name: "Disponibilités", value: payload.availability || "Non renseigné", inline: false },
-        { name: "Expérience RP", value: payload.experience, inline: false },
-        { name: "Qualités & Défauts", value: payload.traits, inline: false },
-        { name: "Motivations", value: payload.motivation, inline: false }
-      ],
-      timestamp: new Date().toISOString()
-    }]
-  };
-
   try {
-    const webhookUrl = "https://discord.com/api/webhooks/1534733289305411735/rIeFIN8w4s4OmnKjcvMW-5i_kVsjYJeQ-dPeUgKT9MzGReVB_WIyTWuBA_RdJSu0yVu5";
-
-    const response = await fetch(webhookUrl, {
+    // 1. Enregistrement dans Supabase
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/applications`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(discordPayload),
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({
+        first_name: payload.firstName,
+        last_name: payload.lastName,
+        age: parseInt(payload.age),
+        position: payload.position,
+        availability: payload.availability,
+        experience: payload.experience,
+        traits: payload.traits,
+        motivation: payload.motivation
+      })
     });
 
-    if (!response.ok) throw new Error('Erreur lors de l’envoi sur le salon Discord.');
+    if (!response.ok) throw new Error('Erreur lors de l’enregistrement.');
+
+    // 2. Optionnel : Webhook Discord de notification simple
+    const discordWebhookUrl = "https://discord.com/api/webhooks/1534733289305411735/rIeFIN8w4s4OmnKjcvMW-5i_kVsjYJeQ-dPeUgKT9MzGReVB_WIyTWuBA_RdJSu0yVu5";
+    if (discordWebhookUrl && !discordWebhookUrl.includes("TON_URL")) {
+      await fetch(discordWebhookUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          content: `📥 **Nouvelle candidature reçue !** Un nouveau dossier de **${payload.firstName} ${payload.lastName}** (${payload.position}) attend sur le panneau d'administration.`
+        })
+      });
+    }
 
     form.reset();
-    setStatus('Candidature transmise ! L’équipe du Yellow Jack reviendra vers toi sur Discord.', 'success');
+    setStatus('Candidature transmise avec succès ! L’équipe du Yellow Jack va l’examiner.', 'success');
   } catch (error) {
+    console.error(error);
     setStatus('Une erreur est survenue lors de l’envoi. Réessaie dans quelques instants.', 'error');
   } finally {
     setLoading(false);
