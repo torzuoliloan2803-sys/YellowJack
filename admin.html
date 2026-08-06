@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Administration — Yellow Jack</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="admin-body">
+    <header class="site-header">
+      <div class="brand">
+        <span class="brand-mark">YJ</span>
+        <span><strong>Administration</strong><small>Yellow Jack Staff</small></span>
+      </div>
+      <a class="button button-ghost" href="index.html">Retour au site</a>
+    </header>
+
+    <main class="admin-container">
+      <h1>Gestion des Candidatures</h1>
+      
+      <!-- Zone de connexion simple pour les recruteurs -->
+      <div id="login-box" class="admin-card">
+        <h3>Connexion Recruteur</h3>
+        <p>Entre le mot de passe du staff pour accéder aux dossiers.</p>
+        <input type="password" id="admin-password" placeholder="Mot de passe staff..." />
+        <button class="button button-primary" id="login-btn">Se connecter</button>
+      </div>
+
+      <!-- Liste des candidatures (cachée tant qu'on n'est pas connecté) -->
+      <div id="dashboard" style="display: none;">
+        <div class="stats-bar">
+          <p>Dossiers en attente : <span id="pending-count">0</span></p>
+        </div>
+        <div id="applications-list" class="applications-grid">
+          <!-- Les dossiers s'afficheront ici dynamiquement -->
+        </div>
+      </div>
+    </main>
+
+    <script src="admin.js"></script>
+  </body>
+</html>
