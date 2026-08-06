@@ -1,86 +1,80 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yellow Jack - Recrutement</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+// CONFIGURATION SUPABASE
+const SUPABASE_URL = "https://ribrhupnsocybyzznwsu.supabase.co";
+const SUPABASE_KEY = "sb_publishable_NDLHFnFxDlHkSSNuPxWYKw_MxmXmz..."; 
 
-    <main class="container">
-        <div class="dossier-header">
-            <span class="dossier-tag">Dossier</span>
-            <h2>CANDIDATURE YELLOW JACK</h2>
-            <p>Informations personnage — RP uniquement</p>
-        </div>
-        
-        <!-- Formulaire de candidature aux bons libellés et IDs -->
-        <form id="application-form">
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="lastName">NOM DU PERSONNAGE *</label>
-                    <input type="text" id="lastName" name="lastName" required>
-                </div>
+document.addEventListener('DOMContentLoaded', () => {
+  const yearEl = document.querySelector('#year');
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-                <div class="form-group">
-                    <label for="firstName">PRÉNOM DU PERSONNAGE *</label>
-                    <input type="text" id="firstName" name="firstName" required>
-                </div>
-            </div>
+  const form = document.querySelector('#application-form');
+  const formStatus = document.querySelector('#form-status');
+  const submitButton = form?.querySelector('.submit-button');
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="age">ÂGE DU PERSONNAGE *</label>
-                    <input type="number" id="age" name="age" required>
-                </div>
+  form?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (formStatus) formStatus.textContent = '';
 
-                <div class="form-group">
-                    <label for="position">POSTE VISÉ *</label>
-                    <select id="position" name="position" required>
-                        <option value="Barman">Barman</option>
-                        <option value="Runner">Runner</option>
-                        <option value="Animateur">Animateur</option>
-                        <option value="Sécurité">Sécurité</option>
-                        <option value="Responsable">Responsable</option>
-                    </select>
-                </div>
-            </div>
+    const formData = new FormData(form);
+    const payload = Object.fromEntries(formData.entries());
 
-            <div class="form-group">
-                <label for="experience">EXPÉRIENCE RP & PASSIF *</label>
-                <textarea id="experience" name="experience" rows="5" required></textarea>
-            </div>
+    if (payload.company) {
+      if (formStatus) formStatus.textContent = 'Candidature transmise !';
+      return;
+    }
 
-            <div class="form-group">
-                <label for="traits">QUALITÉS & DÉFAUTS *</label>
-                <textarea id="traits" name="traits" rows="4" required></textarea>
-            </div>
+    if (submitButton) submitButton.disabled = true;
+    if (formStatus) formStatus.textContent = 'Envoi de votre dossier en cours...';
 
-            <div class="form-group">
-                <label for="motivation">MOTIVATIONS *</label>
-                <textarea id="motivation" name="motivation" rows="4" required></textarea>
-            </div>
+    try {
+      const response = await fetch(`${SUPABASE_URL}/rest/v1/applications`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({
+          first_name: payload.firstName,
+          last_name: payload.lastName,
+          age: parseInt(payload.age) || 18,
+          position: payload.position,
+          availability: "Non spécifié",
+          experience: payload.experience,
+          traits: payload.traits,
+          motivation: payload.motivation
+        })
+      });
 
-            <!-- Champ anti-spam masqué -->
-            <input type="text" name="company" style="display:none;" tabindex="-1" autocomplete="off">
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Erreur Supabase:", errorText);
+        throw new Error('Erreur lors de l’enregistrement');
+      }
 
-            <button type="submit" class="submit-button">Envoyer ma candidature</button>
-        </form>
+      form.reset();
+      if (formStatus) {
+        formStatus.style.color = "#4ade80"; // Vert succès
+        formStatus.textContent = 'Candidature transmise avec succès ! L’équipe va l’examiner.';
+      }
+    } catch (err) {
+      console.error(err);
+      if (formStatus) {
+        formStatus.style.color = "#f87171"; // Rouge erreur
+        formStatus.textContent = 'Une erreur est survenue lors de l’envoi. Réessayez.';
+      }
+    } finally {
+      if (submitButton) submitButton.disabled = false;
+    }
+  });
 
-        <!-- Zone d'affichage du statut d'envoi -->
-        <div id="form-status" style="margin-top: 20px; font-weight: bold; text-align: center;"></div>
-
-        <!-- Bouton secret pour accéder à la page admin -->
-        <div style="margin-top: 50px; text-align: center;">
-            <a href="#" id="secret-admin-btn" style="color: #666; font-size: 0.8rem; text-decoration: none;">Administration</a>
-        </div>
-    </main>
-
-    <footer style="text-align: center; margin-top: 30px; padding: 20px; color: #666;">
-        &copy; <span id="year"></span> - Yellow Jack. Tous droits réservés.
-    </footer>
-
-    <script src="script.js"></script>
-</body>
-</html>
+  document.getElementById('secret-admin-btn')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    const password = prompt("Entrez le mot de passe administrateur :", "");
+    if (password === "yellowjackpassword") {
+      window.location.href = "admin.html";
+    } else if (password !== null) {
+      alert("Mot de passe incorrect !");
+    }
+  });
+});
