@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "netlify/functions/*.mts": {
+      "maxDuration": 10
+    }
+  }
+}
