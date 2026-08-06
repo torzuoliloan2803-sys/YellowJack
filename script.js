@@ -48,10 +48,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (!response.ok) {
         const errorText = await response.text();
-        console.error("Erreur Supabase:", errorText);
+if (!response.ok) {
+        const errorText = await response.text();
+        console.error("DÉTAIL ERREUR SUPABASE :", errorText); // <-- Affiche l'erreur exacte
         throw new Error('Erreur lors de l’enregistrement');
       }
-
       form.reset();
       if (formStatus) {
         formStatus.style.color = "#4ade80"; // Vert succès
