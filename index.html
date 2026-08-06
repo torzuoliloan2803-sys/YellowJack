@@ -123,8 +123,22 @@
             <label><span>Nom du personnage <em>*</em></span><input type="text" name="lastName" autocomplete="off" maxlength="50" required /></label>
             <label><span>Prénom du personnage <em>*</em></span><input type="text" name="firstName" autocomplete="off" maxlength="50" required /></label>
             <label><span>Âge du personnage <em>*</em></span><input type="number" name="age" min="18" max="99" inputmode="numeric" required /></label>
-            <label><span>Poste visé <em>*</em></span><select name="position" required><option value="">Choisir un poste</option><option>Barman</option><option>Runner</option><option>Animateur</option><option>Sécurité</option><option>Responsable</option><option>Autre</option></select></label>
+            <label><span>Poste visé <em>*</em></span><select name="position" required>
+              <option value="">Choisir un poste</option>
+              <option>Barman</option>
+              <option>Barman Senior</option>
+              <option>Runner</option>
+              <option>Animateur</option>
+              <option>Agent de Sécurité</option>
+              <option>Videur</option>
+              <option>Responsable Événementiel</option>
+              <option>Responsable Financier</option>
+              <option>Responsable</option>
+              <option>Co-Gérant</option>
+              <option>Autre</option>
+            </select></label>
           </div>
+          <label><span>Disponibilités (jours / horaires) <em>*</em></span><input type="text" name="availability" placeholder="Ex: Tous les soirs à partir de 21h..." required /></label>
           <label><span>Expérience RP &amp; passif <em>*</em></span><textarea name="experience" rows="4" maxlength="1000" placeholder="Ton parcours, tes expériences et ce que tu sais déjà faire..." required></textarea></label>
           <label><span>Qualités &amp; défauts <em>*</em></span><textarea name="traits" rows="3" maxlength="700" placeholder="Sois honnête, personne n’est parfait dans le désert..." required></textarea></label>
           <label><span>Motivations <em>*</em></span><textarea name="motivation" rows="5" maxlength="1200" placeholder="Pourquoi le Yellow Jack et qu’apporteras-tu à l’équipe ?" required></textarea></label>
