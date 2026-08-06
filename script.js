@@ -1,6 +1,8 @@
-// CONFIGURATION SUPABASE
+// ==========================================
+// CONFIGURATION SUPABASE (Ne supprime pas)
+// ==========================================
 const SUPABASE_URL = "https://ribrhupnsocybyzznwsu.supabase.co";
-const SUPABASE_KEY = "sb_publishable_NDLHFnFXdlHkSSNuPxWYKw_MxmXmZYh"; // Colle ta clé sb_publishable_... ici
+const SUPABASE_KEY = "sb_publishable_NDLHFnFxDlHkSSNuPxWYKw_MxmXmz..."; // Ta clé Publishable
 
 const header = document.querySelector('.site-header');
 const navToggle = document.querySelector('.nav-toggle');
@@ -59,6 +61,7 @@ const setLoading = (loading) => {
   submitButton.querySelector('span').textContent = loading ? 'Transmission en cours...' : 'Envoyer ma candidature';
 };
 
+// Gestion de l'envoi du formulaire vers Supabase
 form?.addEventListener('submit', async (event) => {
   event.preventDefault();
   setStatus('');
@@ -86,7 +89,6 @@ form?.addEventListener('submit', async (event) => {
   setStatus('Le dossier traverse le désert jusqu’au bureau du patron...');
 
   try {
-    // 1. Enregistrement dans Supabase
     const response = await fetch(`${SUPABASE_URL}/rest/v1/applications`, {
       method: 'POST',
       headers: {
@@ -107,19 +109,7 @@ form?.addEventListener('submit', async (event) => {
       })
     });
 
-    if (!response.ok) throw new Error('Erreur lors de l’enregistrement.');
-
-    // 2. Optionnel : Webhook Discord de notification simple
-    const discordWebhookUrl = "https://discord.com/api/webhooks/1534733289305411735/rIeFIN8w4s4OmnKjcvMW-5i_kVsjYJeQ-dPeUgKT9MzGReVB_WIyTWuBA_RdJSu0yVu5";
-    if (discordWebhookUrl && !discordWebhookUrl.includes("TON_URL")) {
-      await fetch(discordWebhookUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          content: `📥 **Nouvelle candidature reçue !** Un nouveau dossier de **${payload.firstName} ${payload.lastName}** (${payload.position}) attend sur le panneau d'administration.`
-        })
-      });
-    }
+    if (!response.ok) throw new Error('Erreur lors de l’enregistrement de la candidature.');
 
     form.reset();
     setStatus('Candidature transmise avec succès ! L’équipe du Yellow Jack va l’examiner.', 'success');
@@ -128,5 +118,20 @@ form?.addEventListener('submit', async (event) => {
     setStatus('Une erreur est survenue lors de l’envoi. Réessaie dans quelques instants.', 'error');
   } finally {
     setLoading(false);
+  }
+});
+
+// ==========================================
+// PROTECTION DU BOUTON ACCÈS STAFF
+// ==========================================
+document.getElementById('secret-admin-btn')?.addEventListener('click', (e) => {
+  e.preventDefault();
+  const password = prompt("Entrez le mot de passe administrateur :", "");
+  
+  // Mot de passe staff (tu peux le modifier ici si tu veux)
+  if (password === "yellowjackpassword") {
+    window.location.href = "admin.html";
+  } else if (password !== null) {
+    alert("Mot de passe incorrect !");
   }
 });
