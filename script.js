@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('secret-admin-btn')?.addEventListener('click', (e) => {
     e.preventDefault();
     const password = prompt("Entrez le mot de passe administrateur :", "");
-    if (password === "yellowjackpassword") {
+    if (password === "@Adminlogin2A") {
       window.location.href = "admin.html";
     } else if (password !== null) {
       alert("Mot de passe incorrect !");
