@@ -2,30 +2,81 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Recrutement</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yellow Jack - Recrutement</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Ton formulaire de candidature existant -->
-    <form id="application-form">
-        <!-- Tes champs de formulaire... -->
-        <button type="submit" class="submit-button">Envoyer</button>
-    </form>
-    
-    <!-- L'endroit où le statut de l'envoi s'affiche -->
-    <div id="form-status"></div>
+    <main class="container">
+        <h1>Formulaire de Recrutement</h1>
+        
+        <!-- Formulaire de candidature -->
+        <form id="application-form">
+            <div class="form-group">
+                <label for="firstName">Prénom :</label>
+                <input type="text" id="firstName" name="firstName" required>
+            </div>
 
-    <!-- ===== AJOUTE CE BLOC ICI DANS TON INDEX.HTML ===== -->
-    <div class="tracking-container" style="margin-top: 30px; text-align: center;">
-      <h3>🔍 Suivre ma candidature</h3>
-      <input type="number" id="track-id" placeholder="Numéro de dossier" style="padding: 8px; border-radius: 5px; border: 1px solid #ccc;">
-      <button id="track-btn" style="padding: 8px 15px; background: #f59e0b; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">Vérifier</button>
-      <div id="track-result" style="margin-top: 15px; font-weight: bold;"></div>
-    </div>
-    <!-- ================================================ -->
+            <div class="form-group">
+                <label for="lastName">Nom :</label>
+                <input type="text" id="lastName" name="lastName" required>
+            </div>
 
-    <!-- Ton script à la fin -->
+            <div class="form-group">
+                <label for="age">Âge :</label>
+                <input type="number" id="age" name="age" required>
+            </div>
+
+            <div class="form-group">
+                <label for="position">Poste souhaité :</label>
+                <input type="text" id="position" name="position" required>
+            </div>
+
+            <div class="form-group">
+                <label for="availability">Disponibilités :</label>
+                <input type="text" id="availability" name="availability" required>
+            </div>
+
+            <div class="form-group">
+                <label for="discord">Nom Discord (ex: pseudo#0000 ou identifiant) :</label>
+                <input type="text" id="discord" name="discord" required>
+            </div>
+
+            <div class="form-group">
+                <label for="experience">Expérience :</label>
+                <textarea id="experience" name="experience" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="traits">Traits de caractère :</label>
+                <textarea id="traits" name="traits" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="motivation">Motivation :</label>
+                <textarea id="motivation" name="motivation" required></textarea>
+            </div>
+
+            <!-- Champ anti-spam masqué -->
+            <input type="text" name="company" style="display:none;" tabindex="-1" autocomplete="off">
+
+            <button type="submit" class="submit-button">Envoyer ma candidature</button>
+        </form>
+
+        <!-- Zone d'affichage du statut d'envoi -->
+        <div id="form-status" style="margin-top: 20px; font-weight: bold; text-align: center;"></div>
+
+        <!-- Bouton secret pour accéder à la page admin -->
+        <div style="margin-top: 50px; text-align: center;">
+            <a href="#" id="secret-admin-btn" style="color: #666; font-size: 0.8rem; text-decoration: none;">Administration</a>
+        </div>
+    </main>
+
+    <footer style="text-align: center; margin-top: 30px; padding: 20px; color: #666;">
+        &copy; <span id="year"></span> - Tous droits réservés.
+    </footer>
+
     <script src="script.js"></script>
 </body>
 </html>
